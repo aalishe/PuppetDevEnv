@@ -1,0 +1,14 @@
+{
+  "name": "johandry-baseconfig",
+  "version": "0.1.0",
+  "author": "johandry",
+  "summary": "Configuration that every node/host should have.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/johandry/PuppetDevEnv",
+  "project_page": "https://github.com/johandry/PuppetDevEnv",
+  "issues_url": "https://github.com/johandry/PuppetDevEnv/issues",
+  "dependencies": [
+    { "name":"puppetlabs-stdlib", "version_requirement":">= 1.0.0" }
+  ],
+  "data_provider": null
+}

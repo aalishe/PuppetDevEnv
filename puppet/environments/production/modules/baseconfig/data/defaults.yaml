@@ -1,0 +1,23 @@
+---
+
+baseconfig::username: appadmin
+baseconfig::password: '*'
+baseconfig::sshPublicKey: ''
+
+baseconfig::hostMap:
+  localhost:
+    ip: 127.0.0.1
+    host_aliases:
+      - localhost.localdomain
+      - localhost4
+      - localhost4.localdomain4
+      - "%{::hostname}"
+      - "%{::fqdn}"
+  localhost6:
+    ip: "::1"
+    host_aliases:
+      - localhost6.localdomain6
+      - "%{::hostname}"
+      - "%{::fqdn}"
+
+baseconfig::packages: [ 'unzip', 'wget' ]

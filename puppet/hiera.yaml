@@ -1,0 +1,15 @@
+---
+:backends:
+  - yaml
+
+:logger: console
+
+:hierarchy:
+  - "hieradata/nodes/%{::fqdn}"
+  - "hieradata/roles/%{::application_name}/%{::node_type}"
+  - hieradata/nodes/default
+  - "%{calling_module}/data/defaults"
+  - hieradata/global
+
+:yaml:
+  :datadir: "/vagrant/puppet/environments/%{::environment}/modules"

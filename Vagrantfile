@@ -4,8 +4,12 @@
 Vagrant.configure(2) do |config|
   # CentOS 7.2 64-bit (amd64/x86_64), Puppet Enterprise 3.8.4 (agent)
   # config.vm.box = "puppetlabs/centos-7.2-64-puppet-enterprise"
+
   # CentOS 7.2 64-bit (amd64/x86_64), Puppet 4.3.2 / Puppet Enterprise 2015.3.2 (agent)
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+
+  # CentOS 7.2 64-bit (amd64/x86_64), no configuration management software
+  # config.vm.box = "puppetlabs/centos-7.2-64-nocm"
 
   # config.vm.network "forwarded_port", guest: 80, host: 8080
   # config.vm.network "private_network", ip: "192.168.33.10"
@@ -23,4 +27,15 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
   # SHELL
+
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment        = "production"
+    puppet.environment_path   = "puppet/environments"
+    # puppet.manifests_path     = "puppet/manifests"
+    # puppet.manifest_file      = "site.pp"
+    # puppet.module_path        = "puppet/modules"
+    puppet.hiera_config_path  = "puppet/hiera.yaml"
+    # Comment out when not needed:
+    puppet.options            = "--verbose --debug"
+  end
 end

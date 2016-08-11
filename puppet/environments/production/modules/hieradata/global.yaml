@@ -1,0 +1,5 @@
+---
+
+# Every node must include the following classes:
+classes:
+  - baseconfig

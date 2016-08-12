@@ -24,8 +24,8 @@ Vagrant.configure(2) do |config|
   # end
 
   config.vm.provision "shell", inline: <<-SHELL
-    # sudo yum update
-    # sudo yum install -y curl
+    sudo yum update
+    sudo yum install -y git
 
     version=$(puppet --version)
     if [[ ${version%%.*} -eq 4 ]]; then
@@ -34,7 +34,14 @@ Vagrant.configure(2) do |config|
       PUPPET_HOME=/opt/puppet
     fi
 
-    sudo ${PUPPET_HOME}/bin/gem install r10k --no-ri --no-rdoc
+    ${PUPPET_HOME}/bin/gem install r10k --no-ri --no-rdoc
+
+    puppet_dir='/opt/puppetlabs/puppet'
+    vagrant_puppet_dir='/vagrant/puppet'
+
+    PUPPETFILE=${vagrant_puppet_dir}/environments/production/modules/hieradata/Puppetfile \
+    PUPPETFILE_DIR=${puppet_dir}/modules \
+    ${puppet_dir}/bin/r10k puppetfile install
   SHELL
 
   config.vm.provision "puppet" do |puppet|

@@ -1,7 +1,7 @@
-# Class: hieradata
+# Class: baseconfig::network
 # ===========================
 #
-# Full description of class hieradata here.
+# Full description of class baseconfig::network here.
 #
 # Parameters
 # ----------
@@ -28,7 +28,7 @@
 # --------
 #
 # @example
-#    class { 'hieradata':
+#    class { 'baseconfig::network':
 #      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #    }
 #
@@ -42,7 +42,20 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class hieradata {
+class baseconfig::network (
+){
+  $hostMap = hiera_hash('baseconfig::network::hostMap')
+  host { [
+    'localhost.localdomain',
+    'localhost4',
+    'localhost4.localdomain4',
+    'localhost6.localdomain6',
+  ]:
+    ensure      => absent,
+  }
+  create_resources(host, $hostMap)
 
-
+  service { 'firewalld':
+    ensure      => stopped,
+  }
 }

@@ -5,11 +5,11 @@
 :logger: console
 
 :hierarchy:
-  - "hieradata/nodes/%{::fqdn}"
-  - "hieradata/roles/%{::application_name}/%{::node_type}"
-  - hieradata/nodes/default
+  - "nodes/%{::fqdn}"
+  - "roles/%{::application_name}/%{::node_type}"
+  - nodes/default
   - "%{calling_module}/data/defaults"
-  - hieradata/global
+  - global
 
 :yaml:
-  :datadir: "/vagrant/puppet/environments/%{::environment}/modules"
+  :datadir: "/vagrant/puppet/environments/%{::environment}/hieradata"

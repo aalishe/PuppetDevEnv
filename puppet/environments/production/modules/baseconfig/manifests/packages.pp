@@ -1,7 +1,7 @@
-# Class: baseconfig
+# Class: baseconfig::packages
 # ===========================
 #
-# Full description of class baseconfig here.
+# Full description of class baseconfig::packages here.
 #
 # Parameters
 # ----------
@@ -28,7 +28,7 @@
 # --------
 #
 # @example
-#    class { 'baseconfig':
+#    class { 'baseconfig::packages':
 #      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #    }
 #
@@ -42,12 +42,13 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class baseconfig (
-    $packages,
+class baseconfig::packages (
+    $install,
 ){
-  class { 'baseconfig::users': } ->
-  class { 'baseconfig::network': } ->
-  class { 'baseconfig::packages': } ->
-  class { 'baseconfig::helpers': } ->
-  Class[ 'baseconfig' ]
+  $yumRepos   = hiera_hash('baseconfig::packages::yumRepos', {})
+  create_resources(yumrepo, $yumRepos)
+
+  @package { $install:
+    ensure      => present,
+  }
 }

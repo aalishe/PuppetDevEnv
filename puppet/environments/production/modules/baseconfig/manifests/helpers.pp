@@ -1,7 +1,7 @@
-# Class: baseconfig
+# Class: baseconfig::helpers
 # ===========================
 #
-# Full description of class baseconfig here.
+# Full description of class baseconfig::helpers here.
 #
 # Parameters
 # ----------
@@ -28,7 +28,7 @@
 # --------
 #
 # @example
-#    class { 'baseconfig':
+#    class { 'baseconfig::helpers':
 #      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #    }
 #
@@ -42,12 +42,18 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class baseconfig (
-    $packages,
+class baseconfig::helpers (
 ){
-  class { 'baseconfig::users': } ->
-  class { 'baseconfig::network': } ->
-  class { 'baseconfig::packages': } ->
-  class { 'baseconfig::helpers': } ->
-  Class[ 'baseconfig' ]
+  $puppet_dir         = '/opt/puppetlabs/puppet'
+  $vagrant_puppet_dir = '/vagrant/puppet'
+
+  file { '/usr/local/bin/run-puppet':
+    content     => "sudo puppet apply -vt --modulepath=${puppet_dir}/modules:${vagrant_puppet_dir}/environments/production/modules ${vagrant_puppet_dir}/environments/production/manifests/site.pp\n",
+    mode        => '0755',
+  }
+
+  file { '/usr/local/bin/run-r10k':
+    content     => "PUPPETFILE=${vagrant_puppet_dir}/environments/production/hieradata/Puppetfile PUPPETFILE_DIR=${puppet_dir}/modules r10k puppetfile install",
+    mode        => '0755',
+  }
 }

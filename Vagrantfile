@@ -24,9 +24,11 @@ Vagrant.configure(2) do |config|
   # end
 
   config.vm.provision "shell", inline: <<-SHELL
+    # Update and install dependencies
     sudo yum update
     sudo yum install -y git
 
+    # Install r10k using the gem from puppet
     version=$(puppet --version)
     if [[ ${version%%.*} -eq 4 ]]; then
       PUPPET_HOME=/opt/puppetlabs/puppet
@@ -36,29 +38,36 @@ Vagrant.configure(2) do |config|
 
     ${PUPPET_HOME}/bin/gem install r10k --no-ri --no-rdoc
 
+    # Get all the modules defined in Puppetfile with r10k
     puppet_dir='/opt/puppetlabs/puppet'
     vagrant_puppet_dir='/vagrant/puppet'
 
     PUPPETFILE=${vagrant_puppet_dir}/environments/production/modules/hieradata/Puppetfile \
     PUPPETFILE_DIR=${puppet_dir}/modules \
     ${puppet_dir}/bin/r10k puppetfile install
+
+    #TODO: Delete the modules that are in this repository
   SHELL
 
   config.vm.provision "puppet" do |puppet|
+    # Puppet 3.X:
+    # puppet.manifests_path     = "puppet/environments/production/manifests"
+    # puppet.manifest_file      = "site.pp"
+    # puppet.module_path        = "puppet/environments/production/modules"
+    # Puppet 4:
     puppet.environment        = "production"
     puppet.environment_path   = "puppet/environments"
+    # Hiera:
     puppet.hiera_config_path  = "puppet/hiera.yaml"
-    # puppet.manifests_path     = "puppet/manifests"
-    # puppet.manifest_file      = "site.pp"
-    # puppet.module_path        = "puppet/modules"
-
+    # Facter:
     # Required to load the hiera data file in roles/<app>/<type>.yaml
     # Example: roles/app/web.yaml
     puppet.facter             = {
       'application_name'      => 'app',
       'node_type'             => 'web',
     }
-
+    # Optional:
+    # puppet.working_directory  = "/tmp/vagrant-puppet"
     puppet.options            = [
       '--verbose',
       '--debug',

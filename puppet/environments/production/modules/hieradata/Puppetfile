@@ -1,6 +1,13 @@
+# NOTE: If the module you are testing is here, it will be downloaded then deleted.
+
 # General r10k Configuration
 forge "http://forge.puppetlabs.com"
 
+# Core modules:
 mod "stdlib",
   :git => "https://github.com/puppetlabs/puppetlabs-stdlib.git",
   :ref => "master"
+
+# Application dependencies
+
+# Application module(s)

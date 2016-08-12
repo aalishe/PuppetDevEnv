@@ -1,4 +1,6 @@
 ---
+# Configuration data for the a host type (role) of the application
+# Configuration data for the web server of application app
 
 # classes:
 #   - someclass

@@ -42,9 +42,7 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class baseconfig (
-    $packages,
-){
+class baseconfig {
   class { 'baseconfig::users': } ->
   class { 'baseconfig::network': } ->
   class { 'baseconfig::packages': } ->

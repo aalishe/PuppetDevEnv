@@ -23,19 +23,40 @@ Vagrant.configure(2) do |config|
   #   vb.memory = "1024"
   # end
 
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    # sudo yum update
+    # sudo yum install -y curl
+
+    version=$(puppet --version)
+    if [[ ${version%%.*} -eq 4 ]]; then
+      PUPPET_HOME=/opt/puppetlabs/puppet
+    else
+      PUPPET_HOME=/opt/puppet
+    fi
+
+    sudo ${PUPPET_HOME}/bin/gem install r10k --no-ri --no-rdoc
+  SHELL
 
   config.vm.provision "puppet" do |puppet|
     puppet.environment        = "production"
     puppet.environment_path   = "puppet/environments"
+    puppet.hiera_config_path  = "puppet/hiera.yaml"
     # puppet.manifests_path     = "puppet/manifests"
     # puppet.manifest_file      = "site.pp"
     # puppet.module_path        = "puppet/modules"
-    puppet.hiera_config_path  = "puppet/hiera.yaml"
-    # Comment out when not needed:
-    puppet.options            = "--verbose --debug"
+
+    # Required to load the hiera data file in roles/<app>/<type>.yaml
+    # Example: roles/app/web.yaml
+    puppet.facter             = {
+      'application_name'      => 'app',
+      'node_type'             => 'web',
+    }
+
+    puppet.options            = [
+      '--verbose',
+      '--debug',
+      # '--evaltrace',
+      # '--trace',
+    ]
   end
 end

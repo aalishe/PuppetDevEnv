@@ -62,7 +62,7 @@ class baseconfig::users (
     home        => "/home/${username}",
     managehome  => true,
     gid         => $username,
-    groups      => [ "${username}", 'wheel' ]
+    groups      => [ "${username}", 'wheel' ],
     comment     => 'Application Admin user',
     shell       => '/bin/bash',
     password    => inline_template('<%=
@@ -78,7 +78,7 @@ class baseconfig::users (
     owner       => $username,
     group       => $username,
   } ->
-  file { "/home/${username}"/.bashrc":
+  file { "/home/${username}/.bashrc":
     ensure      => file,
     owner       => $username,
     group       => $username,

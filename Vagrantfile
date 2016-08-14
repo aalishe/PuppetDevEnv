@@ -8,6 +8,8 @@ Vagrant.configure(2) do |config|
   # CentOS 7.2 64-bit (amd64/x86_64), Puppet 4.3.2 / Puppet Enterprise 2015.3.2 (agent)
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
 
+  config.ssh.insert_key = false
+
   # CentOS 7.2 64-bit (amd64/x86_64), no configuration management software
   # config.vm.box = "puppetlabs/centos-7.2-64-nocm"
 
@@ -23,31 +25,7 @@ Vagrant.configure(2) do |config|
   #   vb.memory = "1024"
   # end
 
-  config.vm.provision "shell", inline: <<-SHELL
-    # Update and install dependencies
-    sudo yum update
-    sudo yum install -y git
-
-    # Install r10k using the gem from puppet
-    version=$(puppet --version)
-    if [[ ${version%%.*} -eq 4 ]]; then
-      PUPPET_HOME=/opt/puppetlabs/puppet
-    else
-      PUPPET_HOME=/opt/puppet
-    fi
-
-    ${PUPPET_HOME}/bin/gem install r10k --no-ri --no-rdoc
-
-    # Get all the modules defined in Puppetfile with r10k
-    puppet_dir='/opt/puppetlabs/puppet'
-    vagrant_puppet_dir='/vagrant/puppet'
-
-    PUPPETFILE=${vagrant_puppet_dir}/environments/production/modules/hieradata/Puppetfile \
-    PUPPETFILE_DIR=${puppet_dir}/modules \
-    ${puppet_dir}/bin/r10k puppetfile install
-
-    #TODO: Delete the modules that are in this repository
-  SHELL
+  config.vm.provision "shell", path: "vagrant/scripts/bootstrap.sh"
 
   config.vm.provision "puppet" do |puppet|
     # Puppet 3.X:

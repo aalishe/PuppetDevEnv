@@ -9,6 +9,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
 
   config.ssh.insert_key = false
+  config.ssh.forward_agent = true
 
   # CentOS 7.2 64-bit (amd64/x86_64), no configuration management software
   # config.vm.box = "puppetlabs/centos-7.2-64-nocm"

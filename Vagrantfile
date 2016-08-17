@@ -18,13 +18,16 @@ Vagrant.configure(2) do |config|
 
   config.ssh.forward_agent = true
 
+  # Issue on Vagrant 1.8.5: https://github.com/mitchellh/vagrant/issues/5186
+  config.ssh.insert_key = false
+
   # CentOS 7.2 64-bit (amd64/x86_64), no configuration management software
   # config.vm.box = "puppetlabs/centos-7.2-64-nocm"
 
   # config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   # config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.network "private_network", ip: "192.168.10.1"
+  config.vm.network "private_network", ip: "192.168.10.10"
   # config.vm.synced_folder "../data", "/vagrant_data"
 
   # config.vm.provider "virtualbox" do |vb|

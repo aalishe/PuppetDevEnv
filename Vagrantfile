@@ -1,21 +1,30 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$puppetVersion = 4
+
+case $puppetVersion
+when 4
+  $box = "puppetlabs/centos-7.2-64-puppet"
+end
+
 Vagrant.configure(2) do |config|
   # CentOS 7.2 64-bit (amd64/x86_64), Puppet Enterprise 3.8.4 (agent)
   # config.vm.box = "puppetlabs/centos-7.2-64-puppet-enterprise"
 
   # CentOS 7.2 64-bit (amd64/x86_64), Puppet 4.3.2 / Puppet Enterprise 2015.3.2 (agent)
-  config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+  config.vm.box = $box
+  config.vm.hostname = "puppetlab"
 
-  config.ssh.insert_key = false
   config.ssh.forward_agent = true
 
   # CentOS 7.2 64-bit (amd64/x86_64), no configuration management software
   # config.vm.box = "puppetlabs/centos-7.2-64-nocm"
 
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
   # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.10.1"
   # config.vm.synced_folder "../data", "/vagrant_data"
 
   # config.vm.provider "virtualbox" do |vb|
@@ -26,16 +35,18 @@ Vagrant.configure(2) do |config|
   #   vb.memory = "1024"
   # end
 
-  config.vm.provision "shell", path: "vagrant/scripts/bootstrap.sh"
+  config.vm.provision "shell", path: "vagrant/scripts/bootstrap.sh", privileged: false
 
   config.vm.provision "puppet" do |puppet|
-    # Puppet 3.X:
-    # puppet.manifests_path     = "puppet/environments/production/manifests"
-    # puppet.manifest_file      = "site.pp"
-    # puppet.module_path        = "puppet/environments/production/modules"
-    # Puppet 4:
-    puppet.environment        = "production"
-    puppet.environment_path   = "puppet/environments"
+    if $puppetVersion == 3
+      puppet.manifests_path     = "puppet/environments/production/manifests"
+      puppet.manifest_file      = "site.pp"
+      puppet.module_path        = "puppet/environments/production/modules"
+    elsif $puppetVersion == 4
+      puppet.environment        = "production"
+      puppet.environment_path   = "puppet/environments"
+    end
+
     # Hiera:
     puppet.hiera_config_path  = "puppet/hiera.yaml"
     # Facter:

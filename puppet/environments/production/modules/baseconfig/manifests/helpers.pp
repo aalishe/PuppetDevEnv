@@ -44,16 +44,23 @@
 #
 class baseconfig::helpers (
 ){
-  $puppet_dir         = '/opt/puppetlabs/puppet'
+  # Puppet 4
+  $puppet_dir         = "/opt/puppetlabs/puppet"
+  $modules_dir        = "${puppet_dir}/modules"
+  # Puppet 3.X
+  # $puppet_dir         = "/opt/puppet"
+  # $modules_dir        = "${puppet_dir}/share/puppet/modules"
+
   $vagrant_puppet_dir = '/vagrant/puppet'
+  $environment        = 'production'
 
   file { '/usr/local/bin/run-puppet':
-    content     => "sudo ${puppet_dir}/bin/puppet apply -vt --modulepath=${puppet_dir}/modules:${vagrant_puppet_dir}/environments/production/modules ${vagrant_puppet_dir}/environments/production/manifests/site.pp\n",
+    content     => "sudo ${puppet_dir}/bin/puppet apply --verbose --debug -t --modulepath=${modules_dir}:${vagrant_puppet_dir}/environments/${environment}/modules --environment=${environment} --hiera_config=${vagrant_puppet_dir}/hiera.yaml ${vagrant_puppet_dir}/environments/${environment}/manifests/site.pp\n",
     mode        => '0755',
   }
 
   file { '/usr/local/bin/run-r10k':
-    content     => "PUPPETFILE=${vagrant_puppet_dir}/environments/production/modules/hieradata/Puppetfile PUPPETFILE_DIR=${puppet_dir}/modules  sudo ${puppet_dir}/bin/r10k puppetfile install",
+    content     => "PUPPETFILE=${vagrant_puppet_dir}/environments/${environment}/modules/hieradata/Puppetfile PUPPETFILE_DIR=${modules_dir} ${puppet_dir}/bin/r10k puppetfile install\n",
     mode        => '0755',
   }
 }

@@ -43,12 +43,12 @@
 # Copyright 2016 Your name here, unless otherwise noted.
 #
 class baseconfig::packages (
-    $install,
+    $present,
 ){
   $yumRepos   = hiera_hash('baseconfig::packages::yumRepos', {})
   create_resources(yumrepo, $yumRepos)
 
-  @package { $install:
+  @package { $present:
     ensure      => present,
   }
 }

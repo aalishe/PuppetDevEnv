@@ -55,7 +55,7 @@ class baseconfig::network (
   }
   create_resources(host, $hostMap)
 
-  service { 'firewalld':
+  service { ['firewalld', 'iptables']:
     ensure      => stopped,
   }
 }

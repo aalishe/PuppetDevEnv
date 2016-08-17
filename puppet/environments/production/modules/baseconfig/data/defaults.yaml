@@ -20,9 +20,11 @@ baseconfig::network::hostMap:
       - "%{::hostname}"
       - "%{::fqdn}"
 
-baseconfig::packages::install: [
+baseconfig::packages::present: [
   'unzip',
   'wget',
   'vim',
   'git',
+  'telnet',
+  'lynx',
 ]

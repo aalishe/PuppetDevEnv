@@ -28,3 +28,5 @@ baseconfig::packages::present: [
   'telnet',
   'lynx',
 ]
+
+baseconfig::packages::baseAppsDirectory: /apps

@@ -1,0 +1,15 @@
+---
+servers:
+# Application
+  - name: rhlwebname001 # Appname node 01 (web tier)
+    ip: 192.168.1.101
+    ports:
+      - "80:8080" # for HTTP Instance.
+  # - name: rhlappname002 # Appname node 02 (app tier)
+  #   ip: 192.168.1.102
+  #   ports:
+  #     - "80:18080" # for HTTP Instance.
+  # - name: rhldbname002 # Appname node 03 (db tier)
+  #   ip: 192.168.1.103
+  #   ports:
+  #     - "80:28080" # for HTTP Instance.

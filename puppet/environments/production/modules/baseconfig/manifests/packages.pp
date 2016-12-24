@@ -44,11 +44,20 @@
 #
 class baseconfig::packages (
     $present,
+    $baseAppsDirectory,
 ){
   $yumRepos   = hiera_hash('baseconfig::packages::yumRepos', {})
   create_resources(yumrepo, $yumRepos)
 
   @package { $present:
     ensure      => present,
+  }
+
+  $packagesDirectory = "${baseAppsDirectory}/packages"
+  file { $baseAppsDirectory:
+    ensure      => directory,
+  } ->
+  file { $packagesDirectory:
+    ensure      => directory,
   }
 }

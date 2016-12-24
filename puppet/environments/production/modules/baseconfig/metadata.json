@@ -1,7 +1,7 @@
 {
   "name": "johandry-baseconfig",
   "version": "0.1.0",
-  "author": "johandry",
+  "author": "Johandry Amador <johandry@gmail.com>",
   "summary": "Configuration that every node/host should have.",
   "license": "Apache-2.0",
   "source": "https://github.com/johandry/PuppetDevEnv",

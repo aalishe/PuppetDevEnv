@@ -9,6 +9,8 @@
   - "hieradata/roles/%{::application_name}/%{::node_type}"
   - hieradata/nodes/default
   - "%{calling_module}/data/defaults"
+  - "../../../../../opt/puppetlabs/puppet/modules/%{calling_module}/data/defaults"
+  - "../../../../../opt/puppet/share/puppet/modules/%{calling_module}/data/defaults"
   - hieradata/global
 
 :yaml:
